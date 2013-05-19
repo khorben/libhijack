@@ -18,7 +18,7 @@
 #include <link.h>
 
 /* PTrace abstraction */
-#if defined(FreeBSD)
+#if defined(FreeBSD) || defined(__NetBSD__)
     #include <machine/reg.h>
     #include "rtld.h"
 

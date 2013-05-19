@@ -11,12 +11,12 @@ if [ ${#CC} -eq 0 ]; then
 fi
 
 PREFIX="/usr"
-if [ ${OS} = "FreeBSD" ]; then
+if [ ${OS} = "FreeBSD" -o "${OS}" = "NetBSD" ]; then
     PREFIX="/usr/local"
 fi
 
 MAKE="make"
-if [ ${OS} = "FreeBSD" ]; then
+if [ ${OS} = "FreeBSD" -o "${OS}" = "NetBSD" ]; then
     MAKE="gmake"
 fi
 
