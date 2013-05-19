@@ -60,7 +60,7 @@ unsigned long map_memory_args(HIJACK *hijack, size_t sz, struct mmap_arg_struct 
 	
 	regs = _hijack_malloc(hijack, sizeof(REGS));
 	
-#if defined(FreeBSD)
+#if defined(FreeBSD) || defined(NetBSD)
     if (ptrace(PTRACE_GETREGS, hijack->pid, (caddr_t)regs, 0) < 0) {
         err = ERROR_SYSCALL;
         goto end;
@@ -128,7 +128,7 @@ unsigned long map_memory_args(HIJACK *hijack, size_t sz, struct mmap_arg_struct 
 	/* time to run mmap */
 	addr = MMAPSYSCALL;
 	while (addr == MMAPSYSCALL) {
-#if defined(FreeBSD)
+#if defined(FreeBSD) || defined(NetBSD)
         if (ptrace(PTRACE_SINGLESTEP, hijack->pid, (caddr_t)0, 0) < 0)
             err = ERROR_SYSCALL;
 #else
@@ -140,7 +140,7 @@ unsigned long map_memory_args(HIJACK *hijack, size_t sz, struct mmap_arg_struct 
 			waitpid(hijack->pid, &i, 0);
 		} while (!WIFSTOPPED(i));
 		
-#if defined(FreeBSD)
+#if defined(FreeBSD) || defined(NetBSD)
         ptrace(PTRACE_GETREGS, hijack->pid, (caddr_t)regs, 0);
         addr = regs->r_rax;
 #else
@@ -168,7 +168,7 @@ unsigned long map_memory_args(HIJACK *hijack, size_t sz, struct mmap_arg_struct 
 		if (IsFlagSet(hijack, F_DEBUG))
 			fprintf(stderr, "[-] Could not map address. Calling mmap failed!\n");
 		
-#if defined(FreeBSD)
+#if defined(FreeBSD) || defined(NetBSD)
         ptrace(PTRACE_SETREGS, hijack->pid, (caddr_t)(&regs_backup), 0);
 #else
 		ptrace(PTRACE_SETREGS, hijack->pid, NULL, &regs_backup);
@@ -178,7 +178,7 @@ unsigned long map_memory_args(HIJACK *hijack, size_t sz, struct mmap_arg_struct 
 	}
 
 end:
-#if defined(FreeBSD)
+#if defined(FreeBSD) || defined(NetBSD)
     if (ptrace(PTRACE_SETREGS, hijack->pid, (caddr_t)(&regs_backup), 0) < 0) {
         err = ERROR_SYSCALL;
     }
@@ -195,7 +195,7 @@ end:
 	return ret;
 }
 
-#if defined(FreeBSD)
+#if defined(FreeBSD) || defined(NetBSD)
 int inject_shellcode_freebsd(HIJACK *hijack, unsigned long addr, void *data, size_t sz)
 {
     REGS origregs;
@@ -214,7 +214,7 @@ int inject_shellcode_freebsd(HIJACK *hijack, unsigned long addr, void *data, siz
 }
 #endif
 
-#if defined(FreeBSD)
+#if defined(FreeBSD) || defined(NetBSD)
 int inject_shellcode(HIJACK *hijack, unsigned long addr, void *data, size_t sz) {
     return inject_shellcode_freebsd(hijack, addr, data, sz);
 }

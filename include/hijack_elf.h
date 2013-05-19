@@ -19,6 +19,11 @@
         #define SYSCALLSEARCH "\x0f\x05"
         #define MMAPSYSCALL 477
     #endif
+#elif defined(NetBSD)
+    #if defined(amd64)
+        #define SYSCALLSEARCH "\x0f\x05"
+        #define MMAPSYSCALL 197
+    #endif
 #elif defined(Linux)
     #if defined(i686)
     #define ELF_ST_TYPE ELF32_ST_TYPE

@@ -76,7 +76,7 @@ char *read_str(HIJACK *hijack, unsigned long base)
 int write_data(HIJACK *hijack, unsigned long start, void *buf, size_t sz)
 {
 	size_t i=0;
-#if defined(FreeBSD)
+#if defined(FreeBSD) || defined(NetBSD)
     int word;
     int nullarg = 0;
 #else

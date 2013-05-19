@@ -186,7 +186,7 @@ EXPORTED_SYM int AssignPid(HIJACK *hijack, pid_t pid)
 EXPORTED_SYM int Attach(HIJACK *hijack)
 {
 	int status;
-#if defined(FreeBSD)
+#if defined(FreeBSD) || defined(NetBSD)
     int nullarg = 0;
 #else
     void *nullarg = NULL;
@@ -226,7 +226,7 @@ EXPORTED_SYM int Attach(HIJACK *hijack)
  */
 EXPORTED_SYM int Detach(HIJACK *hijack)
 {
-#if defined(FreeBSD)
+#if defined(FreeBSD) || defined(NetBSD)
     int nullarg = 0;
 #else
     void *nullarg = NULL;
@@ -376,7 +376,7 @@ EXPORTED_SYM REGS *GetRegs(HIJACK *hijack)
 	if (!(ret))
 		return NULL;
 	
-#if defined(FreeBSD)
+#if defined(FreeBSD) || defined(NetBSD)
     if (ptrace(PTRACE_GETREGS, hijack->pid, (caddr_t)ret, 0)) {
 #else
 	if (ptrace(PTRACE_GETREGS, hijack->pid, NULL, ret) < 0) {
@@ -400,7 +400,7 @@ EXPORTED_SYM int SetRegs(HIJACK *hijack, REGS *regs)
 	if (!IsAttached(hijack))
 		return SetError(hijack, ERROR_NOTATTACHED);
 	
-#if defined(FreeBSD)
+#if defined(FreeBSD) || defined(NetBSD)
     if (ptrace(PTRACE_SETREGS, hijack->pid, (caddr_t)regs, 0) < 0)
 #else
 	if (ptrace(PTRACE_SETREGS, hijack->pid, NULL, regs) < 0)

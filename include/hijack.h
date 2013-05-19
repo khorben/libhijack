@@ -36,6 +36,20 @@
     #define PTRACE_SINGLESTEP   PT_STEP
 
     #define REGS    struct reg
+#if defined(NetBSD)
+    typedef enum _bool {false=0, true=1} bool;
+    #define r_rax regs[_REG_RAX]
+    #define r_rbx regs[_REG_RBX]
+    #define r_rcx regs[_REG_RCX]
+    #define r_rdx regs[_REG_RDX]
+    #define r_r8 regs[_REG_R8]
+    #define r_r9 regs[_REG_R9]
+    #define r_r10 regs[_REG_R10]
+    #define r_rdi regs[_REG_RDI]
+    #define r_rip regs[_REG_RIP]
+    #define r_rsi regs[_REG_RSI]
+    #define r_rsp regs[_REG_RSP]
+#endif
 #elif defined(Linux)
     #define REGS    struct user_regs_struct
     typedef enum _bool {false=0, true=1} bool;
